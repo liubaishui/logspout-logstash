@@ -43,6 +43,7 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 		//fmt.Printf("logstash: begin process")
 		logstashType := ""
 		logstashTags := ""
+		logEnv := "devel"
 		for _, kv := range m.Container.Config.Env {
 			kvp := strings.SplitN(kv, "=", 2)
 			if len(kvp) == 2 && kvp[0] == "LOGSTASH-TYPE" {
@@ -51,6 +52,10 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 
 			if len(kvp) == 2 && kvp[0] == "LOGSTASH-TAGS" {
 				logstashTags = strings.ToLower(kvp[1])
+			}
+
+			if len(kvp) == 2 && kvp[0] == "LOGSTASH-APPENV" {
+				logEnv = strings.ToLower(kvp[1])
 			}
 		}
 
@@ -77,6 +82,7 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 			RancherHostId:   rancherHostid,
 			DockerIP: m.Container.NetworkSettings.IPAddress,
 			RancherIP: rancherIp,
+			AppEnv: logEnv,
 
 		}
 		js, err := json.Marshal(msg)
@@ -106,5 +112,5 @@ type LogstashMessage struct {
 	RancherHostId    string `json:"rancherhostid"`
 	DockerIP  string `json:"dockerip"`
 	RancherIP string `json:"rancherip"`
-
+	AppEnv 	  string `json:"appenv"`
 }
