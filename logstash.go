@@ -45,24 +45,24 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 		for _, kv := range m.Container.Config.Env {
 			kvp := strings.SplitN(kv, "=", 2)
 			if len(kvp) == 2 && kvp[0] == "LOGSTASH-TYPE" {
-				logstashType := strings.ToLower(kvp[1])
+				logstashType = strings.ToLower(kvp[1])
 			}
 
 			if len(kvp) == 2 && kvp[0] == "LOGSTASH-TAGS" {
-				logstashTags := strings.ToLower(kvp[1])
+				logstashTags = strings.ToLower(kvp[1])
 			}
 		}
 
 		rancherIp := ""
 		rancherIpvalue, exists := m.Container.Config.Labels["io.rancher.container.ip"]
 		if (exists) {
-			rancherIp := rancherIpvalue
+			rancherIp = rancherIpvalue
 		}
 
 		rancherHostid := ""
 		hostidValue, exists2 := m.Container.Config.Labels["io.rancher.service.requested.host.id"]
 		if (exists2) {
-			rancherHostid := hostidValue
+			rancherHostid = hostidValue
 		}
 
 		msg := LogstashMessage{
