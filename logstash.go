@@ -70,7 +70,7 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 			HostIP:   m.Container.PortBinding.HostIP,
 			HostPort: m.Container.PortBinding.HostPort,
 			DockerIP: m.Container.NetworkSettings.IPAddress,
-			RancherIP: rancherIp
+			RancherIP: rancherIp,
 
 		}
 		js, err := json.Marshal(msg)
