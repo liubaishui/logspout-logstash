@@ -7,7 +7,6 @@ import (
 	"net"
 	"strings"
 	"github.com/gliderlabs/logspout/router"
-	"github.com/fsouza/go-dockerclient"
 )
 
 func init() {
@@ -60,6 +59,12 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 			rancherIp := rancherIpvalue
 		}
 
+		rancherHostid := ""
+		hostidValue, exists2 := m.Container.Config.Labels["io.rancher.service.requested.host.id"]
+		if (exists2) {
+			rancherHostid := hostidValue
+		}
+
 		msg := LogstashMessage{
 			Message:  m.Data,
 			Name:     m.Container.Name,
@@ -68,8 +73,7 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 			Hostname: m.Container.Config.Hostname,
 			LogType:  logstashType,
 			LogTags:  logstashTags,
-			HostIP:   m.Container.PortBinding.HostIP,
-			HostPort: m.Container.PortBinding.HostPort,
+			RancherHostId:   rancherHostid,
 			DockerIP: m.Container.NetworkSettings.IPAddress,
 			RancherIP: rancherIp,
 
@@ -96,8 +100,7 @@ type LogstashMessage struct {
 	Hostname  string `json:"docker.hostname"`
 	LogType	  string `json:"type"`
 	LogTags   string `json:"tags"`
-	HostIP    string `json:"hostip"`
-	HostPort  string `json:"hostport"`
+	RancherHostId    string `json:"rancherhostid"`
 	DockerIP  string `json:"dockerip"`
 	RancherIP string `json:"rancherip"`
 
