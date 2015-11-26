@@ -5,8 +5,9 @@ import (
 	"errors"
 	"log"
 	"net"
-
+	"strings"
 	"github.com/gliderlabs/logspout/router"
+	"github.com/fsouza/go-dockerclient"
 )
 
 func init() {
