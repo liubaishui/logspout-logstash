@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
-	"fmt"
 	"net"
 	"strings"
 	"github.com/gliderlabs/logspout/router"
@@ -41,7 +40,7 @@ func NewLogstashAdapter(route *router.Route) (router.LogAdapter, error) {
 // Stream implements the router.LogAdapter interface.
 func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 	for m := range logstream {
-		fmt.Printf("logstash: begin process")
+		//fmt.Printf("logstash: begin process")
 		logstashType := ""
 		logstashTags := ""
 		for _, kv := range m.Container.Config.Env {
@@ -86,7 +85,7 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 			continue
 		}
 
-		fmt.Printf("logstash: %s", js)
+		//fmt.Printf("logstash: %s", js)
 		_, err = a.conn.Write(js)
 		if err != nil {
 			log.Println("logstash:", err)
